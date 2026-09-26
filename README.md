@@ -1,6 +1,6 @@
-# Nirapod Survey — Netlify + Google Sheets
+# Nirapod Survey — Everyday Personal Safety & Emergency HCI Study
 
-A self-contained web app version of the Nirapod survey. No framework, no build step — just HTML/CSS/JS. Every submission lands as a new row in a Google Sheet, via a small Google Apps Script backend.
+A self-contained web app version of the Nirapod personal safety survey (streets, parking lots, campus, home, public transit, etc.). No framework, no build step — just HTML/CSS/JS. Every submission lands as a new row in a Google Sheet via a Google Apps Script backend.
 
 ```
 nirapod-survey/

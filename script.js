@@ -24,9 +24,22 @@ const SECTIONS = [
         options: ["Left hand", "Right hand", "Both hands equally", "It depends on the situation"]
       },
       {
-        id: "transit_frequency", type: "radio", required: true,
-        title: "How often do you use public transportation/transit?",
-        options: ["Daily", "Several times a week", "Once a week", "A few times a month", "Rarely"]
+        id: "unsafe_locations", type: "checkbox", required: true,
+        title: "Where do you most often feel unsafe?",
+        help: "Select all locations that apply.",
+        options: [
+          "Streets / walking alone",
+          "Public transit / transit stops",
+          "Parking lots / garages",
+          "Campus or workplace",
+          "Home or residential area"
+        ],
+        allowOther: true
+      },
+      {
+        id: "transit_frequency", type: "radio", required: false,
+        title: "How often do you use public transportation?",
+        options: ["Daily", "Several times a week", "Once a week", "A few times a month", "Rarely / Never"]
       }
     ]
   },
@@ -36,7 +49,7 @@ const SECTIONS = [
       {
         id: "small_buttons_difficulty", type: "likert", required: true,
         title: "I find it difficult to accurately press small buttons when my hands are moving.",
-        help: "During stressful moments — running, a panic feeling, or feeling threatened — how usable is your phone, really?",
+        help: "During stressful or unsafe moments in daily life — running, feeling threatened, or in a panic — how usable is your phone, really?",
         capLow: "Disagree", capHigh: "Agree"
       },
       {
@@ -46,14 +59,14 @@ const SECTIONS = [
       },
       {
         id: "unsafe_response", type: "checkbox", required: true,
-        title: "If you suddenly felt unsafe while travelling, what would you most likely do?",
+        title: "If you suddenly felt unsafe, what would you most likely do?",
         options: [
           "Try to contact someone I trust",
           "Move to a safer/crowded location",
           "Contact emergency services",
           "Use an SOS/emergency feature on my phone",
           "Ask a nearby person for help",
-          "Leave the vehicle/station as soon as possible"
+          "Leave the location/area as soon as possible"
         ],
         allowOther: true
       }
@@ -80,7 +93,7 @@ const SECTIONS = [
       },
       {
         id: "sos_scenario_response", type: "text", required: false,
-        title: "In a scenario like getting mugged, or a sudden dangerous one — if you needed to send an SOS signal, how would you want to do it?",
+        title: "In a scenario like getting followed, mugged, or facing sudden danger — if you needed to send an SOS signal, how would you want to do it?",
         help: "Optional — answer in your own words."
       },
       {
@@ -293,15 +306,15 @@ function renderIntro() {
   root.innerHTML = `
     <div class="intro-container">
       <div class="hero-banner-wrap">
-        <img src="assets/hero.jpg" alt="Nirapod Transit Safety Study" class="hero-banner-img" onerror="this.style.display='none'">
+        <img src="assets/hero.jpg" alt="Nirapod Personal Safety Study" class="hero-banner-img" onerror="this.style.display='none'">
         <div class="hero-overlay"></div>
       </div>
       <div>
         <span class="intro-tagline">CSE 4451 • HCI Research Study</span>
-        <h1 class="intro-title">Help design a safer commute.</h1>
+        <h1 class="intro-title">Help design a safer everyday.</h1>
       </div>
       <p class="intro-p">
-        This study explores phone interactions during high-stress transit situations to help build ergonomic, touch-friendly emergency features for transit riders.
+        This study explores phone interactions during high-stress or unsafe situations in daily life — streets, parking lots, campus, home, public transit — to help build ergonomic, touch-friendly emergency features for personal safety.
       </p>
 
       <div class="badges-row">
