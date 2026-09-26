@@ -1,7 +1,7 @@
 // ============================================================
 // Nirapod Survey — Configuration & Storage
 // ============================================================
-const DEFAULT_ENDPOINT = "https://script.google.com/macros/s/AKfycbysp0YA5Xes-ZnZTLC_L4xgGIKTySPhgjri4kygUF0ou-s7ZdEX5CBv_VZcmoDOGq8L8A/exec";
+const DEFAULT_ENDPOINT = "https://script.google.com/macros/s/AKfycbxvdRJN1TJIhx7OoVJNNOAiLmyVP7UxiuDQ7WL7MqwuVapiRlE1rZYnTjtRSGo1RfISYg/exec";
 let ENDPOINT_URL = localStorage.getItem("nirapod_endpoint") || DEFAULT_ENDPOINT;
 
 const STORAGE_KEY = "nirapod_survey_progress";
