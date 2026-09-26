@@ -504,6 +504,7 @@ function attachChoiceHandlers(q) {
     const cards = root.querySelectorAll(".option-card");
     cards.forEach((card) => {
       card.addEventListener("click", (e) => {
+        e.preventDefault();
         if (e.target.tagName === "INPUT" || e.target.id === "otherText") return;
         const input = card.querySelector("input");
         if (q.type === "checkbox") input.checked = !input.checked;
