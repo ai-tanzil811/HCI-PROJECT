@@ -1,7 +1,7 @@
 // ============================================================
 // Nirapod Survey — Configuration & Storage
 // ============================================================
-const DEFAULT_ENDPOINT = "PASTE_YOUR_GOOGLE_APPS_SCRIPT_URL_HERE";
+const DEFAULT_ENDPOINT = "https://script.google.com/macros/s/AKfycbysp0YA5Xes-ZnZTLC_L4xgGIKTySPhgjri4kygUF0ou-s7ZdEX5CBv_VZcmoDOGq8L8A/exec";
 let ENDPOINT_URL = localStorage.getItem("nirapod_endpoint") || DEFAULT_ENDPOINT;
 
 const STORAGE_KEY = "nirapod_survey_progress";
@@ -245,7 +245,7 @@ function toggleSettings(show) {
 // ============================================================
 function updateProgress() {
   const step = STEPS[currentStepIndex];
-  
+
   if (step.kind === "intro") {
     progressFill.style.width = "0%";
     progressPct.textContent = "0%";
@@ -274,7 +274,7 @@ function render() {
   updateProgress();
   const step = STEPS[currentStepIndex];
   root.innerHTML = "";
-  
+
   // Apply slide animation class
   root.className = `card ${transitionDirection === "next" ? "card-anim-next" : "card-anim-back"}`;
 
@@ -356,7 +356,7 @@ function renderIntro() {
 
 function renderQuestion(step) {
   const { q } = step;
-  
+
   let bodyHtml = "";
   if (q.type === "radio" || q.type === "checkbox") {
     bodyHtml = renderChoiceOptions(q);
@@ -462,7 +462,7 @@ function renderLikert(q) {
   let html = `
     <div class="likert-container">
       <div class="likert-grid">`;
-  
+
   for (let i = 1; i <= 5; i++) {
     const selected = stored === i;
     html += `
@@ -472,7 +472,7 @@ function renderLikert(q) {
         <input type="radio" name="${q.id}" value="${i}" ${selected ? "checked" : ""}>
       </label>`;
   }
-  
+
   html += `
       </div>
       <div class="likert-feedback-label" id="likertFeedback">
@@ -518,11 +518,11 @@ function attachChoiceHandlers(q) {
         const val = parseInt(card.getAttribute("data-val"), 10);
         const input = card.querySelector("input");
         input.checked = true;
-        
+
         cards.forEach((c) => c.classList.remove("selected"));
         card.classList.add("selected");
         if (feedback) feedback.textContent = LIKERT_DESCRIPTORS[val] || `${val}`;
-        
+
         answers[q.id] = val;
         saveAnswers();
       });
@@ -781,9 +781,9 @@ function renderDone(success, noEndpoint) {
         </div>
         <h2 style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 700;">Submission Error</h2>
         <p style="color: var(--text-secondary); max-width: 440px; font-size: 0.9rem; line-height: 1.6;">
-          ${noEndpoint 
-            ? "Backend URL is not configured yet. Open Backend Settings (⚙️ top right) or update ENDPOINT_URL in script.js." 
-            : "Could not send data to Google Sheets. Check your network or URL."}
+          ${noEndpoint
+        ? "Backend URL is not configured yet. Open Backend Settings (⚙️ top right) or update ENDPOINT_URL in script.js."
+        : "Could not send data to Google Sheets. Check your network or URL."}
         </p>
         <div style="display: flex; gap: 10px; margin-top: 12px;">
           <button class="btn-secondary" onclick="toggleSettings(true)">Configure URL</button>
