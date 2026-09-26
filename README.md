@@ -6,8 +6,9 @@ A self-contained web app version of the Nirapod personal safety survey (streets,
 nirapod-survey/
 ├── index.html      the page
 ├── style.css       styling
-├── script.js       survey logic + submission (edit ENDPOINT_URL here)
+├── script.js       survey logic + submission UI
 ├── Code.gs         paste this into Google Apps Script
+├── netlify/functions/submit.js  secure server-side proxy to Apps Script
 ├── netlify.toml    Netlify config
 └── README.md
 ```
@@ -38,17 +39,15 @@ nirapod-survey/
    ```
    Keep this tab open — you'll need to redeploy (Deploy → Manage deployments → Edit → New version) if you ever change `Code.gs`.
 
-## Step 4 — Connect the frontend to your Sheet
+## Step 4 — Connect Netlify securely to your Sheet
 
-1. Open `script.js` in this project.
-2. Near the top, find:
-   ```js
-   const ENDPOINT_URL = "PASTE_YOUR_GOOGLE_APPS_SCRIPT_URL_HERE";
-   ```
-3. Replace the placeholder with the URL you copied in Step 3.
-4. Save the file.
+1. In your Netlify site dashboard, open **Site configuration → Environment variables**.
+2. Add a new variable:
+   - **Key:** `GOOGLE_APPS_SCRIPT_URL`
+   - **Value:** the Web App URL you copied in Step 3 (`https://script.google.com/macros/s/.../exec`)
+3. Redeploy the site so the serverless function picks up the value.
 
-That's the only edit required to wire the two together.
+The frontend now submits to a Netlify Function, so the Google Apps Script URL is not exposed in the browser UI.
 
 ## Step 5 — Test it locally (optional)
 
