@@ -1,8 +1,8 @@
 // ============================================================
 // Nirapod Survey — Configuration & Storage
 // ============================================================
-const DEFAULT_ENDPOINT = "https://script.google.com/macros/s/AKfycbyA0RBNgAzndEcNB4hSLDL3qfC9b3UseM6OiTYn8gnys9OW1i9L2z1aybC-OCoi015IWA/exec";
-let ENDPOINT_URL = localStorage.getItem("nirapod_endpoint") || DEFAULT_ENDPOINT;
+const DEFAULT_ENDPOINT = "https://script.google.com/macros/s/AKfycbwcVA36nbAC1vv9l5LQJWaojKT0hFPBR6pYq0HlgZZzgeib87c9I9e4pLg2h7Bupt6aSw/exec";
+let ENDPOINT_URL = DEFAULT_ENDPOINT;
 
 const STORAGE_KEY = "nirapod_survey_progress";
 
@@ -726,7 +726,7 @@ async function submitSurvey() {
       throw new Error("NO_ENDPOINT");
     }
 
-    await fetch(ENDPOINT_URL, {
+    const response = await fetch(ENDPOINT_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify(payload)
@@ -746,6 +746,7 @@ async function submitSurvey() {
     clearSavedAnswers();
     renderDone(true);
   } catch (err) {
+    console.error("Survey submission failed", err);
     renderDone(false);
   }
 }
