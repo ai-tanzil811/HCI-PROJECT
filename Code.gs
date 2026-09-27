@@ -7,7 +7,7 @@
  *  3. Deploy > New deployment > type "Web app".
  *       - Execute as: Me
  *       - Who has access: Anyone
- *  4. Copy the resulting /exec URL into ENDPOINT_URL in script.js.
+ *  4. Copy the resulting /exec URL into your Netlify env var GOOGLE_APPS_SCRIPT_URL.
  *
  * Every submission is appended as one row. The header row is created
  * automatically from the keys of the first submission received, so the

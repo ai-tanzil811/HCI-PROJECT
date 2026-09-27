@@ -1,7 +1,7 @@
 // ============================================================
 // Nirapod Survey — Configuration & Storage
 // ============================================================
-const DEFAULT_ENDPOINT = "https://script.google.com/macros/s/AKfycbyyJNoGnBkh-HfTDG10FjqFg9y3zGADyN1Fw_PEtyvh1GbG067oGXLc7mF1UUPJxfcyHQ/exec";
+const DEFAULT_ENDPOINT = "https://script.google.com/macros/s/AKfycbyA0RBNgAzndEcNB4hSLDL3qfC9b3UseM6OiTYn8gnys9OW1i9L2z1aybC-OCoi015IWA/exec";
 let ENDPOINT_URL = localStorage.getItem("nirapod_endpoint") || DEFAULT_ENDPOINT;
 
 const STORAGE_KEY = "nirapod_survey_progress";
@@ -177,14 +177,6 @@ const drawerOverlay = document.getElementById("drawerOverlay");
 const closeDrawerBtn = document.getElementById("closeDrawerBtn");
 const drawerList = document.getElementById("drawerList");
 
-const settingsToggleBtn = document.getElementById("settingsToggleBtn");
-const settingsModal = document.getElementById("settingsModal");
-const closeSettingsBtn = document.getElementById("closeSettingsBtn");
-const endpointInput = document.getElementById("endpointInput");
-const saveEndpointBtn = document.getElementById("saveEndpointBtn");
-const testEndpointBtn = document.getElementById("testEndpointBtn");
-const endpointStatus = document.getElementById("endpointStatus");
-
 const themeToggleBtn = document.getElementById("themeToggleBtn");
 
 // ============================================================
@@ -240,17 +232,6 @@ function toggleDrawer(show) {
     drawerOverlay.classList.add("active");
   } else {
     drawerOverlay.classList.remove("active");
-  }
-}
-
-function toggleSettings(show) {
-  if (show === undefined) show = !settingsModal.classList.contains("active");
-  if (show) {
-    endpointInput.value = ENDPOINT_URL;
-    endpointStatus.innerHTML = "";
-    settingsModal.classList.add("active");
-  } else {
-    settingsModal.classList.remove("active");
   }
 }
 
@@ -745,7 +726,7 @@ async function submitSurvey() {
       throw new Error("NO_ENDPOINT");
     }
 
-    const response = await fetch(ENDPOINT_URL, {
+    await fetch(ENDPOINT_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify(payload)
@@ -765,7 +746,7 @@ async function submitSurvey() {
     clearSavedAnswers();
     renderDone(true);
   } catch (err) {
-    renderDone(false, err.message === "NO_ENDPOINT");
+    renderDone(false);
   }
 }
 
@@ -785,7 +766,7 @@ function flattenAnswer(q, val) {
   return val;
 }
 
-function renderDone(success, noEndpoint) {
+function renderDone(success) {
   if (success) {
     root.innerHTML = `
       <div class="status-card">
@@ -809,12 +790,9 @@ function renderDone(success, noEndpoint) {
         </div>
         <h2 style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 700;">Submission Error</h2>
         <p style="color: var(--text-secondary); max-width: 440px; font-size: 0.9rem; line-height: 1.6;">
-          ${noEndpoint
-        ? "Backend URL is not configured yet. Open Backend Settings (⚙️ top right) or update ENDPOINT_URL in script.js."
-        : "Could not send data to Google Sheets. Check your network or URL."}
+          Could not send data to Google Sheets. Please try again in a moment.
         </p>
         <div style="display: flex; gap: 10px; margin-top: 12px;">
-          <button class="btn-secondary" onclick="toggleSettings(true)">Configure URL</button>
           <button class="btn-primary" onclick="submitSurvey()">Retry Submission</button>
         </div>
       </div>
@@ -865,47 +843,10 @@ function setupEventListeners() {
     if (e.target === drawerOverlay) toggleDrawer(false);
   };
 
-  // Settings Modal Toggle
-  settingsToggleBtn.onclick = () => toggleSettings();
-  closeSettingsBtn.onclick = () => toggleSettings(false);
-  settingsModal.onclick = (e) => {
-    if (e.target === settingsModal) toggleSettings(false);
-  };
-
-  saveEndpointBtn.onclick = () => {
-    const val = endpointInput.value.trim();
-    if (val) {
-      ENDPOINT_URL = val;
-      localStorage.setItem("nirapod_endpoint", val);
-      endpointStatus.innerHTML = `<span style="color: var(--accent-teal);">Saved successfully!</span>`;
-      setTimeout(() => toggleSettings(false), 800);
-    }
-  };
-
-  testEndpointBtn.onclick = async () => {
-    const val = endpointInput.value.trim();
-    if (!val) {
-      endpointStatus.innerHTML = `<span style="color: var(--accent-coral);">Please enter a URL first.</span>`;
-      return;
-    }
-    endpointStatus.innerHTML = `<span style="color: var(--text-secondary);">Testing connection…</span>`;
-    try {
-      const res = await fetch(val, { method: "GET" });
-      const data = await res.json();
-      if (data.status === "ok") {
-        endpointStatus.innerHTML = `<span style="color: var(--accent-teal);">✓ Web App live: ${data.message}</span>`;
-      } else {
-        endpointStatus.innerHTML = `<span style="color: var(--accent-coral);">Received unexpected response.</span>`;
-      }
-    } catch (e) {
-      endpointStatus.innerHTML = `<span style="color: var(--accent-coral);">CORS/Network warning (Normal for Apps Script POST endpoints). Endpoint saved.</span>`;
-    }
-  };
-
   // Global Keyboard Shortcuts
   document.addEventListener("keydown", (e) => {
     // Ignore keypresses if modal/drawer or text input is active
-    if (drawerOverlay.classList.contains("active") || settingsModal.classList.contains("active")) return;
+    if (drawerOverlay.classList.contains("active")) return;
     const activeEl = document.activeElement;
     if (activeEl && (activeEl.tagName === "INPUT" || activeEl.tagName === "TEXTAREA") && activeEl.type !== "radio" && activeEl.type !== "checkbox") {
       if (e.key === "Enter" && activeEl.tagName !== "TEXTAREA") {
