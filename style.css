@@ -679,12 +679,6 @@ textarea.other-input-field {
   transform: translateY(0);
 }
 
-#submitBtn {
-  min-height: 52px;
-  padding: 15px 32px;
-  font-size: 1rem;
-}
-
 .question-image {
   display: block;
   width: 100%;

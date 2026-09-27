@@ -386,7 +386,7 @@ function renderQuestion(step) {
         Back
       </button>
       <button class="btn-primary" id="nextBtn">
-        ${currentStepIndex === STEPS.length - 3 ? "Review responses" : "Next"}
+        ${currentStepIndex === totalQuestions ? "Finish survey" : "Next"}
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
       </button>
     </div>
@@ -620,6 +620,12 @@ function tryAdvance(q) {
     return;
   }
   errorEl.innerHTML = "";
+
+  if (q.qIndex === totalQuestions) {
+    submitSurvey();
+    return;
+  }
+
   go(1);
 }
 
@@ -677,16 +683,11 @@ function renderReview() {
 
       <div class="nav-actions">
         <button class="btn-ghost" id="backBtn">Back</button>
-        <button class="btn-primary" id="submitBtn">
-          Submit responses
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-        </button>
       </div>
     </div>
   `;
 
   document.getElementById("backBtn").onclick = () => go(-1);
-  document.getElementById("submitBtn").onclick = submitSurvey;
 }
 
 function getSectionFirstStep(sIdx) {
