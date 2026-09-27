@@ -621,7 +621,7 @@ function tryAdvance(q) {
   }
   errorEl.innerHTML = "";
 
-  if (q.qIndex === totalQuestions) {
+  if (currentStepIndex === totalQuestions) {
     submitSurvey();
     return;
   }
