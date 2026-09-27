@@ -1,7 +1,7 @@
 // ============================================================
 // Nirapod Survey — Configuration & Storage
 // ============================================================
-const DEFAULT_ENDPOINT = "https://script.google.com/macros/s/AKfycbyA0RBNgAzndEcNB4hSLDL3qfC9b3UseM6OiTYn8gnys9OW1i9L2z1aybC-OCoi015IWA/exec";
+const DEFAULT_ENDPOINT = "https://script.google.com/macros/s/AKfycbyyJNoGnBkh-HfTDG10FjqFg9y3zGADyN1Fw_PEtyvh1GbG067oGXLc7mF1UUPJxfcyHQ/exec";
 let ENDPOINT_URL = localStorage.getItem("nirapod_endpoint") || DEFAULT_ENDPOINT;
 
 const STORAGE_KEY = "nirapod_survey_progress";
@@ -89,6 +89,7 @@ const SECTIONS = [
         id: "preferred_trigger", type: "radio", required: true,
         title: "Which emergency trigger would you prefer?",
         options: ["SOS button", "Shake the phone", "Power-button press"],
+        image: "assets/section03.png",
         allowOther: true
       },
       {
@@ -391,6 +392,8 @@ function renderQuestion(step) {
       <h2 class="q-title">${q.title}</h2>
       ${q.help ? `<p class="q-help">${q.help}</p>` : ""}
     </div>
+
+    ${q.image ? `<img class="question-image" src="${escapeAttr(q.image)}" alt="Emergency trigger preference illustration" onerror="this.style.display='none'">` : ""}
 
     <div class="q-body-container">${bodyHtml}</div>
 
@@ -742,11 +745,22 @@ async function submitSurvey() {
       throw new Error("NO_ENDPOINT");
     }
 
-    await fetch(ENDPOINT_URL, {
+    const response = await fetch(ENDPOINT_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify(payload)
     });
+
+    const responseText = await response.text();
+    let result;
+    try {
+      result = JSON.parse(responseText);
+    } catch (parseError) {
+      throw new Error(`Invalid response from Google Apps Script (${response.status})`);
+    }
+    if (!response.ok || result.status !== "ok") {
+      throw new Error(result.message || `Google Apps Script returned HTTP ${response.status}`);
+    }
 
     clearSavedAnswers();
     renderDone(true);

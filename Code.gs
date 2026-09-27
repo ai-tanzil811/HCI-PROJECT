@@ -18,6 +18,9 @@ const SHEET_NAME = "Responses";
 
 function doPost(e) {
   try {
+    if (!e || !e.postData || !e.postData.contents) {
+      throw new Error("No submission data was received.");
+    }
     const data = JSON.parse(e.postData.contents);
     const sheet = getOrCreateSheet();
     writeRow(sheet, data);
@@ -46,6 +49,10 @@ function getOrCreateSheet() {
 
 function writeRow(sheet, data) {
   const keys = Object.keys(data);
+
+  if (keys.length === 0) {
+    throw new Error("The submission did not contain any fields.");
+  }
 
   // First submission: write the header row.
   if (sheet.getLastRow() === 0) {
